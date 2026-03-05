@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: panda-chatter-consumer
+  profiles:
+    active: panda
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Panda Chatter Consumer (Live Feed)
+    version: 1.0.0

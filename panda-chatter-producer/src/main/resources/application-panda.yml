@@ -1,0 +1,4 @@
+# RedPanda profile — external port exposed by docker-compose.yml
+spring:
+  kafka:
+    bootstrap-servers: localhost:19092

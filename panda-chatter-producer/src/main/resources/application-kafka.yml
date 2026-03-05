@@ -1,0 +1,4 @@
+# Kafka profile — external port exposed by docker-compose-kafka.yml
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092

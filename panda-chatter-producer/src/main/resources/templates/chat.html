@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panda Chatter - Send</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <div class="logo">
+            <span class="panda-face">
+                <!-- Inline SVG panda face -->
+                <svg width="56" height="56" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ears -->
+                    <circle cx="22" cy="22" r="18" fill="#1a1a1a"/>
+                    <circle cx="78" cy="22" r="18" fill="#1a1a1a"/>
+                    <circle cx="22" cy="22" r="10" fill="#555"/>
+                    <circle cx="78" cy="22" r="10" fill="#555"/>
+                    <!-- Head -->
+                    <circle cx="50" cy="55" r="40" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+                    <!-- Eye patches -->
+                    <ellipse cx="34" cy="46" rx="12" ry="10" fill="#1a1a1a" transform="rotate(-15 34 46)"/>
+                    <ellipse cx="66" cy="46" rx="12" ry="10" fill="#1a1a1a" transform="rotate(15 66 46)"/>
+                    <!-- Eyes -->
+                    <circle cx="34" cy="46" r="5" fill="white"/>
+                    <circle cx="66" cy="46" r="5" fill="white"/>
+                    <circle cx="35" cy="47" r="3" fill="#1a1a1a"/>
+                    <circle cx="67" cy="47" r="3" fill="#1a1a1a"/>
+                    <!-- Eye shine -->
+                    <circle cx="36" cy="46" r="1" fill="white"/>
+                    <circle cx="68" cy="46" r="1" fill="white"/>
+                    <!-- Nose -->
+                    <ellipse cx="50" cy="62" rx="6" ry="4" fill="#1a1a1a"/>
+                    <!-- Smile -->
+                    <path d="M 40 70 Q 50 80 60 70" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <!-- Cheek blush -->
+                    <circle cx="26" cy="66" r="7" fill="#FFB3C1" opacity="0.5"/>
+                    <circle cx="74" cy="66" r="7" fill="#FFB3C1" opacity="0.5"/>
+                </svg>
+            </span>
+            <div class="logo-text">
+                <h1>Panda Chatter</h1>
+                <span class="badge producer">Producer</span>
+            </div>
+        </div>
+        <p class="tagline">Send messages to the chat stream</p>
+    </header>
+
+    <!-- Alert messages -->
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+    <div th:if="${successMsg}" class="alert alert-success" th:text="${successMsg}"></div>
+
+    <!-- Compose form -->
+    <div class="card">
+        <h2>Compose Message</h2>
+        <form th:action="@{/send}" method="post" class="chat-form" id="chatForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           placeholder="Your panda name..." required maxlength="50"
+                           autocomplete="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content">Message</label>
+                <textarea id="content" name="content" rows="3"
+                          placeholder="What's on your mind?..." required maxlength="500"></textarea>
+                <span class="char-counter"><span id="charCount">0</span> / 500</span>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                &#128228; Send Message
+            </button>
+        </form>
+    </div>
+
+    <!-- Sent messages list -->
+    <div th:if="${sentMessages != null and !sentMessages.isEmpty()}" class="card">
+        <h2>Sent This Session
+            <span class="count" th:text="${sentMessages.size()}">0</span>
+        </h2>
+        <div class="message-list">
+            <div th:each="msg : ${sentMessages}" class="message-item sent">
+                <div class="message-header">
+                    <span class="username" th:text="${msg.username}">User</span>
+                    <span class="timestamp"
+                          th:text="${#temporals.format(msg.timestamp, 'HH:mm:ss')}">00:00:00</span>
+                </div>
+                <div class="message-content" th:text="${msg.content}">Message content</div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${sentMessages == null or sentMessages.isEmpty()}" class="card empty-state-card">
+        <div class="empty-state">
+            <span>&#127963;</span>
+            <p>No messages sent yet. Say something!</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Persist username in localStorage
+    const usernameField = document.getElementById('username');
+    const contentField  = document.getElementById('content');
+    const charCount     = document.getElementById('charCount');
+
+    const saved = localStorage.getItem('pandaUsername');
+    if (saved) usernameField.value = saved;
+
+    document.getElementById('chatForm').addEventListener('submit', function () {
+        localStorage.setItem('pandaUsername', usernameField.value);
+    });
+
+    // Character counter
+    contentField.addEventListener('input', function () {
+        charCount.textContent = this.value.length;
+    });
+</script>
+
+</body>
+</html>
