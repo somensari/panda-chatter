@@ -15,9 +15,9 @@ public class MessageProducerService {
     private static final Logger log = LoggerFactory.getLogger(MessageProducerService.class);
     private static final String TOPIC = "chat-messages";
 
-    private final KafkaTemplate<String, ChatMessage> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public MessageProducerService(KafkaTemplate<String, ChatMessage> kafkaTemplate) {
+    public MessageProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
