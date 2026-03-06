@@ -17,4 +17,4 @@ scrape_configs:
 
 remote_write:
   - url: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server=panda-chatter
-    bearer_token: ${NEW_RELIC_LICENSE_KEY}
+    bearer_token: REPLACE_WITH_NEW_RELIC_LICENSE_KEY
