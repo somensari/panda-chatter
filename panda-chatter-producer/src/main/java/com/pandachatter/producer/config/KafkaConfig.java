@@ -2,10 +2,11 @@ package com.pandachatter.producer.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.boot.autoconfigure.kafka.DefaultKafkaProducerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.kafka.core.DefaultKafkaProducerFactoryCustomizer;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
@@ -20,7 +21,10 @@ public class KafkaConfig {
         return factory -> {
             JsonSerializer<Object> serializer = new JsonSerializer<>(objectMapper);
             serializer.setAddTypeInfo(false);
-            factory.setValueSerializer(serializer);
+            @SuppressWarnings("unchecked")
+            DefaultKafkaProducerFactory<Object, Object> typedFactory =
+                    (DefaultKafkaProducerFactory<Object, Object>) factory;
+            typedFactory.setValueSerializer(serializer);
         };
     }
 
