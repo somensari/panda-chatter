@@ -19,12 +19,10 @@ public class KafkaConfig {
     @Bean
     public DefaultKafkaProducerFactoryCustomizer objectMapperProducerCustomizer(ObjectMapper objectMapper) {
         return factory -> {
-            JsonSerializer<Object> serializer = new JsonSerializer<>(objectMapper);
-            serializer.setAddTypeInfo(false);
             @SuppressWarnings("unchecked")
             DefaultKafkaProducerFactory<Object, Object> typedFactory =
                     (DefaultKafkaProducerFactory<Object, Object>) factory;
-            typedFactory.setValueSerializer(serializer);
+            typedFactory.setValueSerializer(new JsonSerializer<>(objectMapper));
         };
     }
 
